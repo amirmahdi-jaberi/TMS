@@ -1,0 +1,23 @@
+# استفاده از آخرین نسخه پایدار پایتون
+FROM python:3.11-slim
+
+# جلوگیری از خطاهای Encoding
+ENV PYTHONUNBUFFERED=1
+ENV PYTHONDONTWRITEBYTECODE=1
+
+# تنظیم دایرکتوری کاری
+WORKDIR /app
+
+# نصب پیش‌نیازها
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    && rm -rf /var/lib/apt/lists/*
+
+# کپی کردن فایل‌ها
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+COPY . .
+
+# اجرای برنامه
+CMD ["python", "main.py"]
